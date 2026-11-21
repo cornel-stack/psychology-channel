@@ -13,23 +13,25 @@
     "fetch-evidence": "tsx scripts/fetch-evidence.ts",
     "prep": "tsx scripts/prep-assets.ts",
     "voiceover": "tsx scripts/generate-voiceover.ts",
-    "fetch-coco": "tsx scripts/fetch-coco.ts",
+    "fetch-images": "tsx scripts/fetch-images.ts",
     "predev": "tsx scripts/prep-assets.ts",
     "prerender": "tsx scripts/prep-assets.ts",
-    "render": "remotion render FeelingsYouCantName out/feelings-you-cant-name.mp4",
+    "render": "remotion render FeelingsYouCantName out/feelings-you-cant-name.mp4 --gl=swangle",
     "render:thumbnail": "remotion still FeelingsThumbnail out/feelings-you-cant-name-thumbnail.png && remotion still FeelingsThumbnailB out/feelings-you-cant-name-thumbnail-B.png",
     "build": "npm run verify-evidence && npm run render"
   },
   "dependencies": {
-    "@dicebear/collection": "^9.4.2",
-    "@dicebear/core": "^9.4.2",
+    "@react-three/fiber": "^8.18.0",
     "@remotion/bundler": "^4.0.370",
     "@remotion/cli": "^4.0.370",
     "@remotion/google-fonts": "^4.0.370",
+    "@remotion/three": "^4.0.545",
+    "@types/three": "^0.169.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "remotion": "^4.0.370",
-    "roughjs": "^4.6.6"
+    "roughjs": "^4.6.6",
+    "three": "^0.169.0"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",

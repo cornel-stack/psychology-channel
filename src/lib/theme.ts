@@ -4,9 +4,9 @@
  * borrowed from the emotion families in Cowen & Keltner (2017).
  */
 export const theme = {
-  paper: "#fbf7ef", // warm napkin white
-  paperShadow: "#efe7d6",
-  ink: "#2a2a33", // hand-drawn stroke
+  paper: "#ffffff", // clean white canvas (Brainosophic-style)
+  paperShadow: "#ececf0",
+  ink: "#15151c", // near-black text for high contrast on white
   inkSoft: "#5a5a68",
   accents: {
     sadness: "#4a78b5",

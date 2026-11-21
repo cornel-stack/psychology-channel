@@ -22,3 +22,6 @@ evidence/images/*.tmp.pdf
 
 # Remotion bundle output
 build/
+
+# Local analysis scratch (downloaded reference media — never commit)
+analysis/

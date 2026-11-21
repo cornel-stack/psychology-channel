@@ -54,8 +54,10 @@ jobs:
       - name: Install dependencies
         run: npm ci || npm install
 
-      - name: Fetch Coco Material illustrations (CC0)
-        run: npm run fetch-coco || echo "Coco fetch issues; scenes fall back gracefully."
+      # Images are committed (with attribution in assets/images.json). This only
+      # fills gaps if a new shot was added without its image.
+      - name: Fetch missing CC images (Openverse)
+        run: npm run fetch-images || echo "Image fetch issues; missing shots fall back to word cards."
 
       - name: Generate voiceover (Edge TTS — Brian)
         run: |
