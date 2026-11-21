@@ -1,0 +1,44 @@
+{
+  "name": "psychology-channel",
+  "version": "0.1.0",
+  "description": "Evidence-based psychology YouTube channel — programmatic videos rendered on GitHub CI with Remotion, three.js, rough.js and Lottie/VRM characters.",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "remotion studio",
+    "studio": "remotion studio",
+    "lint": "tsc --noEmit",
+    "verify-evidence": "tsx scripts/verify-evidence.ts",
+    "fetch-evidence": "tsx scripts/fetch-evidence.ts",
+    "prep": "tsx scripts/prep-assets.ts",
+    "predev": "tsx scripts/prep-assets.ts",
+    "prerender": "tsx scripts/prep-assets.ts",
+    "render": "remotion render FeelingsYouCantName out/feelings-you-cant-name.mp4 --gl=swangle",
+    "render:thumbnail": "remotion still FeelingsThumbnail out/feelings-you-cant-name-thumbnail.png && remotion still FeelingsThumbnailB out/feelings-you-cant-name-thumbnail-B.png",
+    "build": "npm run verify-evidence && npm run render"
+  },
+  "dependencies": {
+    "@pixiv/three-vrm": "^3.4.2",
+    "@react-three/drei": "^9.122.0",
+    "@react-three/fiber": "^8.18.0",
+    "@remotion/bundler": "^4.0.370",
+    "@remotion/cli": "^4.0.370",
+    "@remotion/google-fonts": "^4.0.370",
+    "@remotion/lottie": "^4.0.370",
+    "@remotion/three": "^4.0.370",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "remotion": "^4.0.370",
+    "roughjs": "^4.6.6",
+    "three": "^0.169.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@types/react": "^18.3.12",
+    "@types/three": "^0.169.0",
+    "playwright": "^1.49.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Evidence sources",
+  "type": "object",
+  "required": ["sources"],
+  "properties": {
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "claim", "citation", "url", "image", "verified"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+          "claim": { "type": "string", "minLength": 10 },
+          "headlineStat": { "type": "string" },
+          "citation": { "type": "string", "minLength": 10 },
+          "doi": { "type": ["string", "null"] },
+          "url": { "type": "string", "format": "uri" },
+          "interactiveMap": { "type": "string" },
+          "license": { "type": "string" },
+          "openAccess": { "type": "boolean" },
+          "image": { "type": "string" },
+          "sha256": { "type": ["string", "null"] },
+          "zoom": {
+            "type": "object",
+            "properties": {
+              "x": { "type": "number", "minimum": 0, "maximum": 1 },
+              "y": { "type": "number", "minimum": 0, "maximum": 1 },
+              "scale": { "type": "number", "minimum": 1 }
+            }
+          },
+          "verified": { "type": "boolean" }
+        }
+      }
+    }
+  }
+}

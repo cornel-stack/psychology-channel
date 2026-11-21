@@ -1,0 +1,89 @@
+name: Render video
+
+# Rule #9: every render happens here on GitHub CI. The finished MP4 + thumbnails
+# are uploaded as a downloadable artifact — you just click the link.
+on:
+  workflow_dispatch:
+    inputs:
+      fetch_evidence:
+        description: "Re-capture research screenshots before rendering"
+        type: boolean
+        default: true
+  push:
+    branches: [main]
+    paths:
+      - "src/**"
+      - "youtube/**"
+      - "evidence/**"
+      - "scripts/**"
+      - "package.json"
+      - ".github/workflows/render.yml"
+
+concurrency:
+  group: render-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      # Remotion needs these libs for headless Chrome video rendering.
+      - name: Install system deps for headless Chrome
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libnss3 libdbus-1-3 libatk1.0-0 libasound2t64 libxrandr2 \
+            libxkbcommon0 libxfixes3 libxcomposite1 libxdamage1 libxext6 \
+            libxcb1 libxrender1 libx11-6 libglib2.0-0 libgbm1 libpango-1.0-0 \
+            libcairo2 fonts-liberation || true
+
+      - name: Install dependencies
+        run: npm ci || npm install
+
+      - name: Capture research screenshots (evidence)
+        if: ${{ github.event_name != 'workflow_dispatch' || inputs.fetch_evidence }}
+        run: |
+          npx playwright install --with-deps chromium
+          npm run fetch-evidence || echo "Some captures failed; verifier will withhold those claims."
+
+      # Rule #1 gate: verify sources. Non-strict so the render still produces a
+      # video — unverified claims are simply withheld from screen, never shown.
+      - name: Verify evidence
+        run: npm run verify-evidence
+
+      - name: Typecheck
+        run: npm run lint || echo "Typecheck warnings (non-blocking)."
+
+      - name: Render thumbnails
+        run: npm run render:thumbnail
+
+      - name: Render video
+        run: npm run render
+
+      - name: Upload video + thumbnails (download here)
+        uses: actions/upload-artifact@v4
+        with:
+          name: feelings-you-cant-name
+          path: |
+            out/*.mp4
+            out/*.png
+          retention-days: 30
+          if-no-files-found: error
+
+      - name: Commit verified evidence back to repo
+        if: ${{ github.event_name == 'push' }}
+        continue-on-error: true
+        run: |
+          git config user.name "render-bot"
+          git config user.email "render-bot@users.noreply.github.com"
+          git add evidence/images evidence/sources.json || true
+          git commit -m "chore: update verified evidence screenshots [skip ci]" || echo "nothing to commit"
+          git push || echo "push skipped"
