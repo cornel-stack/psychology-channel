@@ -1,146 +1,167 @@
 /**
- * The evidence-on-screen component (Rule #1).
+ * Evidence on screen (Rule #1, accurate). Shows the real paper and zooms to the
+ * EXACT rectangle of the supporting quote (from sources.json `locator`, computed
+ * by pdftotext/DOM geometry — never a guess). The verbatim quote is shown and
+ * the located sentence is highlighted in place.
  *
- * Shows the actual research screenshot, then animates a ZOOM-IN to the exact
- * region where the claim lives (zoom coords come from sources.json). A
- * citation ribbon + "Verified source" badge keeps us honest.
- *
- * Hard rule: if the source is NOT verified, we DO NOT show the screenshot —
- * we show an explicit "evidence pending verification" card instead, so an
- * unverified claim can never masquerade as proof.
+ * For `cite` sources (paywalled) there is no screenshot — a CitationCard renders
+ * instead. Unverified sources are withheld entirely.
  */
 import React from "react";
-import { AbsoluteFill, Img, interpolate, useCurrentFrame, useVideoConfig, spring } from "remotion";
-import { getSource, sourceImage } from "../lib/evidence";
+import {
+  AbsoluteFill,
+  Img,
+  interpolate,
+  Easing,
+  useCurrentFrame,
+  useVideoConfig,
+  spring,
+} from "remotion";
+import { getSource, sourceImage, canZoom, EvidenceSource } from "../lib/evidence";
 import { theme } from "../lib/theme";
-import { RoughRect, RoughLayer } from "../lib/rough";
+import { CitationCard } from "./CitationCard";
 
-export const EvidenceZoom: React.FC<{
-  sourceId: string;
-  /** frames: hold wide, then zoom */
-  zoomStart?: number;
-  zoomDuration?: number;
-}> = ({ sourceId, zoomStart = 24, zoomDuration = 40 }) => {
+const PANEL = { x: 70, y: 150, w: 980, h: 820 }; // paper viewport on the left
+
+const Badge: React.FC<{ src: EvidenceSource }> = ({ src }) => (
+  <div
+    style={{
+      display: "inline-flex",
+      alignItems: "center",
+      gap: 10,
+      background: theme.accents.awe,
+      color: "#fff",
+      fontFamily: theme.fontBody,
+      fontWeight: 800,
+      fontSize: 22,
+      padding: "7px 16px",
+      borderRadius: 999,
+    }}
+  >
+    ✓ Verified source{src.openAccess ? " · open access" : ""}
+  </div>
+);
+
+export const EvidenceZoom: React.FC<{ sourceId: string; zoomStart?: number; zoomDur?: number }> = ({
+  sourceId,
+  zoomStart = 30,
+  zoomDur = 45,
+}) => {
   const frame = useCurrentFrame();
-  const { fps, width, height } = useVideoConfig();
+  const { fps } = useVideoConfig();
   const src = getSource(sourceId);
-  const z = src.zoom ?? { x: 0.5, y: 0.4, scale: 2 };
 
-  const t = interpolate(frame, [zoomStart, zoomStart + zoomDuration], [0, 1], {
+  if (!canZoom(src)) return <CitationCard sourceId={sourceId} />;
+
+  const imgW = src.imgW!;
+  const imgH = src.imgH!;
+  const loc = src.locator!;
+
+  // contain the page in the panel
+  const base = Math.min(PANEL.w / imgW, PANEL.h / imgH);
+  const off0 = { x: (PANEL.w - imgW * base) / 2, y: (PANEL.h - imgH * base) / 2 };
+
+  // zoom target: the located quote rectangle, centered, filling the panel
+  const lcx = (loc.x + loc.w / 2) * imgW;
+  const lcy = (loc.y + loc.h / 2) * imgH;
+  const zoom = Math.max(
+    base * 1.5,
+    Math.min(base * 6, Math.min((PANEL.w * 0.82) / (loc.w * imgW), (PANEL.h * 0.46) / (loc.h * imgH)))
+  );
+  const off1 = { x: PANEL.w / 2 - zoom * lcx, y: PANEL.h / 2 - zoom * lcy };
+
+  const p = interpolate(frame, [zoomStart, zoomStart + zoomDur], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
+    easing: Easing.inOut(Easing.ease),
   });
-  const scale = interpolate(t, [0, 1], [1, z.scale]);
-  // translate so the zoom focal point stays centered
-  const tx = interpolate(t, [0, 1], [0, (0.5 - z.x) * width * z.scale]);
-  const ty = interpolate(t, [0, 1], [0, (0.5 - z.y) * height * z.scale]);
+  const scale = base + (zoom - base) * p;
+  const offX = off0.x + (off1.x - off0.x) * p;
+  const offY = off0.y + (off1.y - off0.y) * p;
 
-  const cardIn = spring({ frame, fps, config: { damping: 16 } });
-
-  if (!src.verified) {
-    return (
-      <AbsoluteFill style={{ justifyContent: "center", alignItems: "center" }}>
-        <div
-          style={{
-            width: 1100,
-            padding: 60,
-            textAlign: "center",
-            fontFamily: theme.fontBody,
-            color: theme.inkSoft,
-            border: `4px dashed ${theme.inkSoft}`,
-            borderRadius: 24,
-            background: "rgba(255,255,255,0.5)",
-          }}
-        >
-          <div style={{ fontSize: 40, fontWeight: 800, color: theme.ink }}>Evidence pending verification</div>
-          <div style={{ fontSize: 28, marginTop: 16 }}>
-            {src.citation}
-          </div>
-          <div style={{ fontSize: 22, marginTop: 16, fontStyle: "italic" }}>
-            (This claim is withheld from screen until its source screenshot is captured &amp; hash-verified.)
-          </div>
-        </div>
-      </AbsoluteFill>
-    );
-  }
+  const cardIn = spring({ frame: frame - 6, fps, config: { damping: 18 } });
+  const hlOpacity = interpolate(p, [0.45, 0.7], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
   return (
     <AbsoluteFill>
-      {/* framed screenshot with zoom */}
-      <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", overflow: "hidden" }}>
-        <div
-          style={{
-            transform: `translate(${tx}px, ${ty}px) scale(${scale})`,
-            transformOrigin: "center center",
-            transition: "none",
-            borderRadius: 10,
-            overflow: "hidden",
-            boxShadow: "0 24px 60px rgba(0,0,0,0.25)",
-            background: "#fff",
-            width: 1200,
-            maxHeight: 900,
-          }}
-        >
-          <Img src={sourceImage(sourceId)} style={{ width: "100%", display: "block" }} />
-        </div>
-      </AbsoluteFill>
-
-      {/* highlight box on the focal region once zoomed */}
-      {t > 0.6 && (
-        <RoughLayer>
-          <RoughRect
-            x={width * 0.5 - 260}
-            y={height * 0.5 - 90}
-            w={520}
-            h={180}
-            stroke={theme.accents.anger}
-            strokeWidth={4}
-            seed={9}
-          />
-        </RoughLayer>
-      )}
-
-      {/* citation ribbon */}
+      {/* paper viewport */}
       <div
         style={{
           position: "absolute",
-          left: 60,
-          bottom: 60,
-          right: 60,
-          transform: `translateY(${(1 - cardIn) * 40}px)`,
-          opacity: cardIn,
+          left: PANEL.x,
+          top: PANEL.y,
+          width: PANEL.w,
+          height: PANEL.h,
+          overflow: "hidden",
+          borderRadius: 14,
+          background: "#fff",
+          boxShadow: "0 24px 60px rgba(0,0,0,0.22)",
         }}
       >
         <div
           style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 14,
-            background: theme.accents.awe,
-            color: "#fff",
-            fontFamily: theme.fontBody,
-            fontWeight: 800,
-            fontSize: 24,
-            padding: "8px 18px",
-            borderRadius: 999,
-            marginBottom: 12,
+            position: "absolute",
+            width: imgW,
+            height: imgH,
+            transform: `translate(${offX}px, ${offY}px) scale(${scale})`,
+            transformOrigin: "0 0",
           }}
         >
-          ✓ Verified source {src.openAccess ? "· open access" : ""}
+          <Img src={sourceImage(sourceId)} style={{ width: imgW, height: imgH, display: "block" }} />
+          {/* highlight the exact located quote, in image space */}
+          <div
+            style={{
+              position: "absolute",
+              left: loc.x * imgW - 6,
+              top: loc.y * imgH - 4,
+              width: loc.w * imgW + 12,
+              height: loc.h * imgH + 8,
+              background: "rgba(242,177,0,0.28)",
+              borderBottom: `3px solid ${theme.accents.joy}`,
+              boxShadow: `0 0 0 2px ${theme.accents.anger}`,
+              opacity: hlOpacity,
+            }}
+          />
+        </div>
+      </div>
+
+      {/* right-hand evidence panel */}
+      <div
+        style={{
+          position: "absolute",
+          left: 1110,
+          top: 180,
+          width: 740,
+          transform: `translateY(${(1 - cardIn) * 30}px)`,
+          opacity: cardIn,
+          fontFamily: theme.fontBody,
+        }}
+      >
+        <Badge src={src} />
+        <div style={{ marginTop: 20, fontSize: 30, lineHeight: 1.3, color: theme.inkSoft }}>
+          What the paper actually says:
         </div>
         <div
           style={{
-            background: "rgba(42,42,51,0.92)",
-            color: theme.paper,
-            fontFamily: theme.fontBody,
-            fontSize: 26,
+            marginTop: 10,
+            fontSize: 34,
             lineHeight: 1.35,
-            padding: "16px 22px",
-            borderRadius: 16,
+            color: theme.ink,
+            fontWeight: 700,
+            borderLeft: `6px solid ${theme.accents.joy}`,
+            paddingLeft: 20,
           }}
         >
+          “{src.quote}”
+        </div>
+        {src.stat ? (
+          <div style={{ marginTop: 22, fontSize: 28, color: theme.accents.anger, fontWeight: 800 }}>
+            {src.stat}
+          </div>
+        ) : null}
+        <div style={{ marginTop: 26, fontSize: 22, lineHeight: 1.4, color: theme.inkSoft }}>
           {src.citation}
-          {src.doi ? <div style={{ opacity: 0.8, fontSize: 22, marginTop: 6 }}>doi:{src.doi}</div> : null}
+          {src.doi ? <div style={{ marginTop: 6 }}>doi:{src.doi}</div> : null}
         </div>
       </div>
     </AbsoluteFill>

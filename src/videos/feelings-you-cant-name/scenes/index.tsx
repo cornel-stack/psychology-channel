@@ -3,13 +3,28 @@ import { AbsoluteFill, useCurrentFrame, useVideoConfig, spring, interpolate } fr
 import { Scene } from "../script";
 import { theme } from "../../../lib/theme";
 import { NapkinCanvas } from "../../../components/NapkinCanvas";
-import { EmotionFigure } from "../../../components/EmotionFigure";
+import { Peep } from "../../../components/Peep";
+import { CocoArt } from "../../../components/CocoScene";
 import { EvidenceZoom } from "../../../components/EvidenceZoom";
-import { EmotionConstellation3D } from "../../../components/EmotionConstellation3D";
 import { Caption } from "../../../components/Captions";
-import { RoughLayer, RoughRect } from "../../../lib/rough";
 
-/** Renders whichever caption cue is active for the current local frame. */
+/** Soft accent blob for depth behind characters. */
+const Blob: React.FC<{ color: string; x: number; y: number; r: number; o?: number }> = ({ color, x, y, r, o = 0.16 }) => (
+  <div
+    style={{
+      position: "absolute",
+      left: x - r,
+      top: y - r,
+      width: r * 2,
+      height: r * 2,
+      borderRadius: "50%",
+      background: color,
+      opacity: o,
+      filter: "blur(10px)",
+    }}
+  />
+);
+
 export const CaptionTrack: React.FC<{ scene: Scene }> = ({ scene }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -23,12 +38,12 @@ const Kicker: React.FC<{ text: string; accent: string }> = ({ text, accent }) =>
   <div
     style={{
       position: "absolute",
-      top: 70,
+      top: 66,
       left: 160,
       fontFamily: theme.fontBody,
       fontWeight: 900,
-      fontSize: 30,
-      letterSpacing: 2,
+      fontSize: 28,
+      letterSpacing: 3,
       textTransform: "uppercase",
       color: accent,
     }}
@@ -37,61 +52,84 @@ const Kicker: React.FC<{ text: string; accent: string }> = ({ text, accent }) =>
   </div>
 );
 
-export const HookScene: React.FC<{ scene: Scene }> = ({ scene }) => {
+export const ColdOpenScene: React.FC<{ scene: Scene }> = ({ scene }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const titleIn = spring({ frame, fps, config: { damping: 16 } });
-  const subIn = spring({ frame: frame - 18, fps, config: { damping: 14 } });
+  const tIn = spring({ frame, fps, config: { damping: 18 } });
   return (
     <NapkinCanvas>
-      <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", textAlign: "center" }}>
+      <Blob color={theme.accents[scene.accent]} x={1480} y={520} r={360} />
+      <AbsoluteFill style={{ justifyContent: "center", paddingLeft: 160, paddingRight: 760 }}>
         <div
           style={{
             fontFamily: theme.fontTitle,
-            fontSize: 150,
+            fontSize: 132,
+            lineHeight: 1.0,
             color: theme.ink,
-            transform: `scale(${titleIn})`,
-            lineHeight: 1,
-            maxWidth: 1500,
+            transform: `translateY(${(1 - tIn) * 40}px)`,
+            opacity: tIn,
           }}
         >
           {scene.title}
         </div>
-        <div
-          style={{
-            fontFamily: theme.fontBody,
-            fontWeight: 900,
-            fontSize: 64,
-            color: theme.accents.anger,
-            marginTop: 20,
-            transform: `translateY(${(1 - subIn) * 30}px)`,
-            opacity: subIn,
-          }}
-        >
-          {scene.subtitle}
-        </div>
       </AbsoluteFill>
-      <EmotionFigure emotion={scene.emotion} action="idle" accent={scene.accent} x={1380} y={360} scale={0.7} />
+      <Peep emotion={scene.emotion} seed={scene.peepSeed} size={620} x={1180} y={300} />
       <CaptionTrack scene={scene} />
     </NapkinCanvas>
   );
 };
 
-export const FigureScene: React.FC<{ scene: Scene }> = ({ scene }) => (
+export const BigTextScene: React.FC<{ scene: Scene }> = ({ scene }) => {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  const lines = scene.bigText ?? [];
+  return (
+    <NapkinCanvas>
+      <Blob color={theme.accents[scene.accent]} x={960} y={540} r={520} o={0.1} />
+      <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", textAlign: "center" }}>
+        <div>
+          {lines.map((line, i) => {
+            const a = spring({ frame: frame - (6 + i * 10), fps, config: { damping: 15 } });
+            const isLast = i === lines.length - 1;
+            return (
+              <div
+                key={i}
+                style={{
+                  fontFamily: theme.fontBody,
+                  fontWeight: 900,
+                  fontSize: 104,
+                  lineHeight: 1.04,
+                  letterSpacing: -1,
+                  color: isLast ? theme.accents[scene.accent] : theme.ink,
+                  transform: `translateY(${(1 - a) * 40}px) scale(${0.9 + a * 0.1})`,
+                  opacity: a,
+                }}
+              >
+                {line}
+              </div>
+            );
+          })}
+        </div>
+      </AbsoluteFill>
+      <CaptionTrack scene={scene} />
+    </NapkinCanvas>
+  );
+};
+
+export const PeepScene: React.FC<{ scene: Scene }> = ({ scene }) => (
   <NapkinCanvas>
-    <Kicker text="The problem" accent={theme.accents[scene.accent]} />
-    <EmotionFigure
-      emotion={scene.emotion}
-      action={scene.action ?? "idle"}
-      accent={scene.accent}
-      x={760}
-      y={300}
-      scale={1}
-    />
-    {/* a little hand-drawn ground line */}
-    <RoughLayer>
-      <RoughRect x={700} y={940} w={520} h={6} stroke={theme.inkSoft} seed={5} />
-    </RoughLayer>
+    <Blob color={theme.accents[scene.accent]} x={960} y={470} r={360} />
+    <Peep emotion={scene.emotion} seed={scene.peepSeed} size={560} x={680} y={210} />
+    <CaptionTrack scene={scene} />
+  </NapkinCanvas>
+);
+
+export const CocoScene: React.FC<{ scene: Scene }> = ({ scene }) => (
+  <NapkinCanvas>
+    <Kicker text="In real life" accent={theme.accents[scene.accent]} />
+    <Blob color={theme.accents[scene.accent]} x={1300} y={500} r={380} />
+    {scene.coco ? <CocoArt name={scene.coco} size={660} x={1040} y={230} /> : null}
+    <Peep emotion={scene.emotion ?? "explaining"} seed={scene.peepSeed} size={460} x={260} y={330} />
     <CaptionTrack scene={scene} />
   </NapkinCanvas>
 );
@@ -100,19 +138,6 @@ export const EvidenceScene: React.FC<{ scene: Scene }> = ({ scene }) => (
   <NapkinCanvas vignette={false}>
     <Kicker text="The evidence" accent={theme.accents[scene.accent]} />
     <EvidenceZoom sourceId={scene.sourceId!} />
-    {scene.emotion ? (
-      <EmotionFigure emotion={scene.emotion} action="idle" accent={scene.accent} x={30} y={560} scale={0.5} />
-    ) : null}
-    <CaptionTrack scene={scene} />
-  </NapkinCanvas>
-);
-
-export const ConstellationScene: React.FC<{ scene: Scene }> = ({ scene }) => (
-  <NapkinCanvas>
-    <Kicker text="The map of feeling" accent={theme.accents[scene.accent]} />
-    <AbsoluteFill>
-      <EmotionConstellation3D />
-    </AbsoluteFill>
     <CaptionTrack scene={scene} />
   </NapkinCanvas>
 );
@@ -120,30 +145,42 @@ export const ConstellationScene: React.FC<{ scene: Scene }> = ({ scene }) => (
 export const WordCardsScene: React.FC<{ scene: Scene }> = ({ scene }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
+  const words = scene.words ?? [];
   return (
     <NapkinCanvas>
       <Kicker text="Named elsewhere" accent={theme.accents[scene.accent]} />
-      <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", gap: 36 }}>
-        {(scene.words ?? []).map((w, i) => {
-          const appear = spring({ frame: frame - (12 + i * 24), fps, config: { damping: 16 } });
+      <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", gap: 22, paddingTop: 40 }}>
+        {words.map((w, i) => {
+          const a = spring({ frame: frame - (14 + i * 20), fps, config: { damping: 16 } });
           return (
             <div
               key={w.word}
               style={{
-                width: 1200,
-                background: "rgba(255,255,255,0.7)",
+                display: "flex",
+                alignItems: "center",
+                gap: 28,
+                width: 1240,
+                background: "rgba(255,255,255,0.78)",
                 borderLeft: `12px solid ${theme.accents[scene.accent]}`,
-                borderRadius: 16,
-                padding: "22px 34px",
-                transform: `translateX(${(1 - appear) * -60}px)`,
-                opacity: appear,
+                borderRadius: 18,
+                padding: "18px 30px",
+                transform: `translateX(${(1 - a) * -70}px)`,
+                opacity: a,
                 boxShadow: "0 8px 0 rgba(0,0,0,0.05)",
               }}
             >
-              <div style={{ fontFamily: theme.fontTitle, fontSize: 70, color: theme.ink, lineHeight: 1 }}>
-                {w.word} <span style={{ fontFamily: theme.fontBody, fontSize: 28, color: theme.inkSoft }}>· {w.lang}</span>
+              {w.coco ? (
+                <div style={{ width: 92, height: 92, flexShrink: 0, position: "relative" }}>
+                  <CocoArt name={w.coco} size={92} x={0} y={0} drawOn={false} delay={14 + i * 20} />
+                </div>
+              ) : null}
+              <div>
+                <div style={{ fontFamily: theme.fontTitle, fontSize: 60, color: theme.ink, lineHeight: 1 }}>
+                  {w.word}{" "}
+                  <span style={{ fontFamily: theme.fontBody, fontSize: 26, color: theme.inkSoft }}>· {w.lang}</span>
+                </div>
+                <div style={{ fontFamily: theme.fontBody, fontSize: 28, color: theme.ink, marginTop: 4 }}>{w.meaning}</div>
               </div>
-              <div style={{ fontFamily: theme.fontBody, fontSize: 32, color: theme.ink, marginTop: 6 }}>{w.meaning}</div>
             </div>
           );
         })}
@@ -157,11 +194,12 @@ export const OutroScene: React.FC<{ scene: Scene }> = ({ scene }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const pulse = 1 + Math.sin(frame / 8) * 0.03;
-  const show = spring({ frame: frame - 30, fps, config: { damping: 14 } });
+  const show = spring({ frame: frame - 26, fps, config: { damping: 14 } });
   return (
     <NapkinCanvas>
-      <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", textAlign: "center" }}>
-        <div style={{ fontFamily: theme.fontTitle, fontSize: 96, color: theme.ink, maxWidth: 1400 }}>
+      <Blob color={theme.accents[scene.accent]} x={1480} y={520} r={340} />
+      <AbsoluteFill style={{ justifyContent: "center", paddingLeft: 160, paddingRight: 720 }}>
+        <div style={{ fontFamily: theme.fontTitle, fontSize: 104, color: theme.ink, lineHeight: 1.05 }}>
           You weren't broken.
           <br />
           You were under-worded.
@@ -169,21 +207,22 @@ export const OutroScene: React.FC<{ scene: Scene }> = ({ scene }) => {
         <div
           style={{
             marginTop: 40,
+            alignSelf: "flex-start",
             transform: `scale(${show * pulse})`,
             opacity: show,
             background: theme.accents.anger,
             color: "#fff",
             fontFamily: theme.fontBody,
             fontWeight: 900,
-            fontSize: 48,
-            padding: "18px 44px",
+            fontSize: 44,
+            padding: "16px 40px",
             borderRadius: 999,
           }}
         >
           ▶ Subscribe
         </div>
       </AbsoluteFill>
-      <EmotionFigure emotion={scene.emotion} action="idle" accent={scene.accent} x={1420} y={360} scale={0.7} />
+      <Peep emotion={scene.emotion} seed={scene.peepSeed} size={620} x={1200} y={300} />
       <CaptionTrack scene={scene} />
     </NapkinCanvas>
   );
@@ -191,20 +230,19 @@ export const OutroScene: React.FC<{ scene: Scene }> = ({ scene }) => {
 
 export const renderScene = (scene: Scene) => {
   switch (scene.type) {
-    case "hook":
-      return <HookScene scene={scene} />;
-    case "figure":
-      return <FigureScene scene={scene} />;
+    case "cold-open":
+      return <ColdOpenScene scene={scene} />;
+    case "bigtext":
+      return <BigTextScene scene={scene} />;
+    case "peep":
+      return <PeepScene scene={scene} />;
+    case "coco":
+      return <CocoScene scene={scene} />;
     case "evidence":
       return <EvidenceScene scene={scene} />;
-    case "constellation3d":
-      return <ConstellationScene scene={scene} />;
     case "wordcards":
       return <WordCardsScene scene={scene} />;
     case "outro":
       return <OutroScene scene={scene} />;
   }
 };
-
-// interpolate imported for potential scene transitions
-void interpolate;

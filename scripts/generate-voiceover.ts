@@ -30,7 +30,7 @@ const OUT = join(ROOT, "public", "assets", "voiceover.mp3");
 const NARRATION_JSON = join(ROOT, "src", "videos", "feelings-you-cant-name", "narration.json");
 
 const VOICE = "en-US-BrianNeural";
-const RATE = "+6%"; // a touch brisker for retention
+const RATE = "+0%"; // natural, measured pace — suits a serious channel
 const FPS = 30;
 const TAIL = 0.6; // seconds of breathing room after each line
 

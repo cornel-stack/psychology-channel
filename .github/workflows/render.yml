@@ -52,6 +52,9 @@ jobs:
       - name: Install dependencies
         run: npm ci || npm install
 
+      - name: Fetch Coco Material illustrations (CC0)
+        run: npm run fetch-coco || echo "Coco fetch issues; scenes fall back gracefully."
+
       - name: Generate voiceover (Edge TTS — Brian)
         run: |
           python3 -m pip install --user edge-tts

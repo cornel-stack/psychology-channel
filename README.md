@@ -10,14 +10,14 @@ Programmatic, evidence-backed psychology videos — written in code, rendered on
 
 | Requirement | How it's done |
 |---|---|
-| **1. Evidence-based, verified** | Every on-screen claim maps to a source in [`evidence/sources.json`](evidence/sources.json). A verifier checks each URL/DOI resolves and each screenshot exists + matches a recorded hash. **An unverified claim is never shown** — it renders an "evidence pending" card instead. The video zooms into the exact passage of each paper. |
-| **2. Characters with emotions & actions** | Hand-drawn [`EmotionFigure`](src/components/EmotionFigure.tsx) (sad/joy/fear/anger/awe + sit/walk/idle). Upgrade paths wired up: **Lottie** ([`LottieEmotion`](src/components/LottieEmotion.tsx)) and **VRM + Mixamo** ([`VRMCharacter`](src/components/VRMCharacter.tsx), `@pixiv/three-vrm`). |
-| **3. Hand-drawn look** | [`rough.js`](src/lib/rough.tsx) primitives (seeded for deterministic frames). |
-| **4. Manim / Remotion** | Remotion is the orchestrator. Manim clips can be dropped into `public/assets/` and imported as `<Video>` (see below). |
-| **5. 3D animation** | [`EmotionConstellation3D`](src/components/EmotionConstellation3D.tsx) via `three.js` + `@remotion/three` — the 27 emotions orbiting in 3D. |
+| **1. Evidence-based, verified, accurate zoom** | Every claim maps to a source in [`evidence/sources.json`](evidence/sources.json) with the **exact verbatim quote**. [`fetch-evidence`](scripts/fetch-evidence.ts) locates that quote's pixel rectangle (PDF via `pdftotext -bbox`, web via DOM geometry) and stores a `locator`; the video zooms to **that exact sentence** and highlights it. [`verify-evidence`](scripts/verify-evidence.ts) gates the render on URL/DOI + screenshot hash + locator. Paywalled papers become honest citation cards. See [`evidence/CORRECTIONS.md`](evidence/CORRECTIONS.md). |
+| **2. Characters with emotions** | **DiceBear Open Peeps** (`@dicebear/collection`, CC0) as emotion-driven characters — [`Peep`](src/components/Peep.tsx) swaps the `face` variant per beat, with deterministic bob + blink. **Coco Material** (CC0 hand-drawn SVGs) for "figure doing an activity" scenes — [`CocoArt`](src/components/CocoScene.tsx), prefetched by [`fetch-coco`](scripts/fetch-coco.ts). |
+| **3. Hand-drawn look** | [`rough.js`](src/lib/rough.tsx) + the hand-drawn Open Peeps / Coco illustrations, on a warm paper canvas. |
+| **4. Manim / Remotion** | Remotion is the orchestrator. Manim clips can be dropped into `public/assets/` and imported as `<Video>`. |
+| **5. 3D** | Intentionally **not used** — a 3D gimmick didn't serve the content, so it was removed in favor of the character system above. |
 | **6. Napkin / white canvas** | [`NapkinCanvas`](src/components/NapkinCanvas.tsx) warm-paper backdrop. |
 | **7. YouTube assets** | Clickbait [`Thumbnail`](youtube/feelings-you-cant-name/Thumbnail.tsx) (A/B), [`description.md`](youtube/feelings-you-cant-name/description.md), [`metadata.json`](youtube/feelings-you-cant-name/metadata.json). |
-| **8/9. Public repo + CI render** | [`.github/workflows/render.yml`](.github/workflows/render.yml) renders everything and uploads a downloadable MP4. |
+| **8/9. Public repo + CI render** | [`.github/workflows/render.yml`](.github/workflows/render.yml) builds Coco assets + Brian voiceover, verifies evidence, renders, and uploads a downloadable MP4. Everything renders on CI. |
 
 ---
 

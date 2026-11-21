@@ -1,19 +1,25 @@
 import { staticFile } from "remotion";
 import sourcesData from "../../evidence/sources.json";
 
+export type Rect = { x: number; y: number; w: number; h: number };
+
 export type EvidenceSource = {
   id: string;
   claim: string;
-  headlineStat?: string;
+  stat?: string;
   citation: string;
   doi?: string | null;
+  sourceType: "pdf" | "web" | "cite";
   url: string;
-  interactiveMap?: string;
+  page?: number;
+  quote: string;
   license?: string;
   openAccess?: boolean;
-  image: string;
+  image: string | null;
+  locator: Rect | null;
+  imgW?: number;
+  imgH?: number;
   sha256?: string | null;
-  zoom?: { x: number; y: number; scale: number };
   verified: boolean;
 };
 
@@ -21,22 +27,18 @@ const sources = (sourcesData as { sources: EvidenceSource[] }).sources;
 
 export const getSource = (id: string): EvidenceSource => {
   const s = sources.find((x) => x.id === id);
-  if (!s) throw new Error(`Evidence source "${id}" not found in sources.json`);
+  if (!s) throw new Error(`Evidence source "${id}" not found`);
   return s;
 };
 
-/**
- * Resolve the research screenshot for a source. Evidence images live under
- * public/evidence/ at render time (see the build step that copies them).
- */
-export const sourceImage = (id: string): string =>
-  staticFile(`evidence/${getSource(id).image}`);
+export const sourceImage = (id: string): string => {
+  const s = getSource(id);
+  if (!s.image) throw new Error(`Source "${id}" has no image`);
+  return staticFile(`evidence/${s.image}`);
+};
 
-/**
- * Rule #1 guard: a claim may only be shown if its source is verified.
- * Unverified sources render a visible "evidence pending" placeholder instead
- * of a fake screenshot — we never show an unverified claim as fact.
- */
-export const isShowable = (id: string): boolean => getSource(id).verified;
+/** A paper screenshot may be shown only if verified AND it has a located quote. */
+export const canZoom = (s: EvidenceSource): boolean =>
+  s.verified && s.sourceType !== "cite" && !!s.image && !!s.locator;
 
 export const allSources = sources;

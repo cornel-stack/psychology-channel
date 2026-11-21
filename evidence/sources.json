@@ -1,193 +1,345 @@
 {
   "$schema": "./sources.schema.json",
-  "description": "Every factual claim shown on screen MUST map to a verified source here. The verifier (scripts/verify-evidence.ts) checks each URL resolves and each screenshot exists + matches its recorded sha256. The render is GATED on this: an unverified claim is never shown.",
+  "description": "Every on-screen claim maps to a source here. For each, `quote` is the EXACT verbatim text in the paper that supports the claim; the capture pipeline locates that text and records its pixel rectangle (`locator`) so the video zooms to the precise sentence/figure — never a guessed spot. Claims were re-verified against primary sources (see CORRECTIONS.md).",
   "sources": [
     {
       "id": "cowen-keltner-2017",
-      "claim": "Self-report captures 27 distinct categories of emotion, bridged by continuous gradients — not just 6 basic emotions.",
-      "headlineStat": "800+ people rated 2,185 emotional video clips; 27 dimensions were needed to capture how they reliably felt.",
+      "claim": "Self-reported feeling needed 27 distinct emotion categories — bridged by smooth gradients, contrary to basic-emotion theories.",
+      "stat": "853 participants rated 2,185 emotional videos; 27 categories emerged.",
       "citation": "Cowen, A. S., & Keltner, D. (2017). Self-report captures 27 distinct categories of emotion bridged by continuous gradients. PNAS, 114(38), E7900–E7909.",
       "doi": "10.1073/pnas.1702247114",
+      "sourceType": "web",
       "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5617253/",
-      "interactiveMap": "https://www.alancowen.com/video",
-      "license": "Free via PMC; figures reproduced for educational commentary (fair use) with on-screen citation.",
+      "quote": "27 distinct varieties of reported emotional experience",
+      "license": "Free to read via PMC; shown as fair-use educational commentary (PNAS is not CC-BY).",
       "openAccess": true,
       "image": "cowen-keltner-2017.png",
-      "sha256": "4208336097c10ec482cc65d369288f5adb51e96db430ae05ba9cfe9fcae837d9",
-      "zoom": {
-        "x": 0.5,
-        "y": 0.28,
-        "scale": 2.4
+      "locator": {
+        "x": 0.10571428571428572,
+        "y": 0.321162109375,
+        "w": 0.5257142857142857,
+        "h": 0.35728515625
       },
-      "verified": true
+      "sha256": "47748c531839cc73806f4bd753a986ef1f3e01eac272da6ce580b16d62d9c9b0",
+      "verified": true,
+      "imgW": 1400,
+      "imgH": 1600
     },
     {
       "id": "barrett-2001",
-      "claim": "People who finely distinguish their emotions regulate them far better.",
-      "headlineStat": "High emotion-differentiation individuals used ~30% more emotion-regulation strategies.",
+      "claim": "People who finely distinguish their negative emotions regulate them better — especially as the feeling gets more intense.",
+      "stat": "N=53; negative-emotion differentiation predicted more regulation, particularly at higher intensity.",
       "citation": "Barrett, L. F., Gross, J., Christensen, T. C., & Benvenuto, M. (2001). Knowing what you're feeling and knowing what to do about it. Cognition & Emotion, 15(6), 713–724.",
       "doi": "10.1080/02699930143000239",
+      "sourceType": "pdf",
       "url": "https://www.affective-science.org/wp-content/uploads/2024/04/01MaprelationDiffReg.pdf",
-      "license": "Author-hosted PDF (Barrett's Affective Science lab).",
+      "page": 1,
+      "quote": "particularly at higher levels of emotional intensity",
+      "license": "Author-hosted PDF (Barrett lab); fair-use academic commentary (Cognition & Emotion is subscription).",
       "openAccess": true,
       "image": "barrett-2001.png",
-      "sha256": "a8ce2d93813676f71edc3a935d1e01a96a6e73ce4372cf70ac23d465fd7ea46c",
-      "zoom": {
-        "x": 0.5,
-        "y": 0.4,
-        "scale": 2.2
+      "locator": {
+        "x": 0.0942204847193701,
+        "y": 0.655680062020881,
+        "w": 0.8199817708619308,
+        "h": 0.033834430769701614
       },
-      "verified": true
+      "sha256": "a8ce2d93813676f71edc3a935d1e01a96a6e73ce4372cf70ac23d465fd7ea46c",
+      "verified": true,
+      "imgW": 759,
+      "imgH": 1226
     },
     {
-      "id": "kashdan-2015",
-      "claim": "Low emotional granularity is linked to worse mental and physical health outcomes.",
-      "headlineStat": "Low granularity predicts heavier drinking under stress, more aggression, more self-harm, and stronger neural reactivity to rejection.",
+      "id": "kashdan-2015-strategies",
+      "claim": "People skilled at naming their negative feelings used nearly 30% more strategies to regulate them over two weeks.",
+      "stat": "~30% more regulation strategies (Kashdan et al.'s summary of Barrett 2001).",
       "citation": "Kashdan, T. B., Barrett, L. F., & McKnight, P. E. (2015). Unpacking emotion differentiation. Current Directions in Psychological Science, 24(1), 10–16.",
       "doi": "10.1177/0963721414550708",
+      "sourceType": "pdf",
       "url": "https://c3po.media.mit.edu/wp-content/uploads/sites/45/2016/01/Kashdan-Barrett-Mcknight_2015.pdf",
-      "license": "Author/institution-hosted PDF (MIT). Screenshot with on-screen citation as fair-use commentary.",
+      "page": 3,
+      "quote": "nearly 30% more strategies",
+      "license": "Author/institution-hosted PDF (MIT); fair-use academic commentary (SAGE).",
       "openAccess": true,
-      "image": "kashdan-2015.png",
-      "sha256": "a90f79873509d38c849cc7060c906a2458b5713037ecf013afce422d29b46268",
-      "zoom": {
-        "x": 0.5,
-        "y": 0.35,
-        "scale": 2.2
+      "image": "kashdan-2015-strategies.png",
+      "locator": {
+        "x": 0.6210804311774462,
+        "y": 0.5694095785440613,
+        "w": 0.18580845771144272,
+        "h": 0.014061302681992398
       },
-      "verified": true
+      "sha256": "abdeb85faecca468f59402d43abcdeacc2beafe8a2dde54d8f77716b619a2c34",
+      "verified": true,
+      "imgW": 1257,
+      "imgH": 1632
+    },
+    {
+      "id": "kashdan-2015-costs",
+      "claim": "Low emotional granularity carries real costs: people high in granularity were 20–50% less likely to retaliate aggressively.",
+      "stat": "20–50% less likely to retaliate; ~40% less alcohol when stressed; less insula/ACC activity when rejected.",
+      "citation": "Kashdan, T. B., Barrett, L. F., & McKnight, P. E. (2015). Unpacking emotion differentiation. Current Directions in Psychological Science, 24(1), 10–16.",
+      "doi": "10.1177/0963721414550708",
+      "sourceType": "pdf",
+      "url": "https://c3po.media.mit.edu/wp-content/uploads/sites/45/2016/01/Kashdan-Barrett-Mcknight_2015.pdf",
+      "page": 4,
+      "quote": "20% to 50% less likely to retaliate",
+      "license": "Author/institution-hosted PDF (MIT); fair-use academic commentary (SAGE).",
+      "openAccess": true,
+      "image": "kashdan-2015-costs.png",
+      "locator": {
+        "x": 0.07960199004975124,
+        "y": 0.22416334610472544,
+        "w": 0.4055044776119403,
+        "h": 0.029386973180076617
+      },
+      "sha256": "b86235878a02f57c2f4c8573333860b55d0cb01753e3fd65d7236a28d68ee11d",
+      "verified": true,
+      "imgW": 1257,
+      "imgH": 1632
     },
     {
       "id": "hoemann-2021",
-      "claim": "Emotional granularity is measurable and trainable — it increases with intensive self-tracking.",
-      "headlineStat": "Granularity rose over weeks of repeated, in-the-moment emotion sampling.",
+      "claim": "Emotional granularity is trainable — it measurably increased after two weeks of tracking feelings in the moment.",
+      "stat": "Granularity rose with a medium effect (positive d=0.50, negative d=0.32).",
       "citation": "Hoemann, K., Barrett, L. F., & Quigley, K. S. (2021). Emotional granularity increases with intensive ambulatory assessment. Frontiers in Psychology, 12, 704125.",
       "doi": "10.3389/fpsyg.2021.704125",
+      "sourceType": "web",
       "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8355493/",
-      "license": "CC-BY — figures and text may be reproduced with attribution.",
+      "quote": "emotional granularity increased over the course of ambulatory assessment",
+      "license": "CC-BY — may be reproduced with attribution.",
       "openAccess": true,
       "image": "hoemann-2021.png",
-      "sha256": "62bafcaf11a06866d0cbac7e4e042ec0b7ad8fc6f5cae0d82fc2828bdb69d3d4",
-      "zoom": {
-        "x": 0.5,
-        "y": 0.3,
-        "scale": 2.2
+      "locator": {
+        "x": 0.10571428571428572,
+        "y": 0.406162109375,
+        "w": 0.5257142857142857,
+        "h": 0.1875
       },
-      "verified": true
+      "sha256": "ba3412a17c4a3559af6df9120da824e041569cbd1fe47c48c558150f72993ca0",
+      "verified": true,
+      "imgW": 1400,
+      "imgH": 1600
     },
     {
       "id": "salminen-1999",
-      "claim": "A meaningful share of people genuinely cannot identify or describe their own emotions (alexithymia).",
-      "headlineStat": "In 1,285 adults, alexithymia prevalence was 13% — and men (17%) were nearly twice as likely as women (10%).",
+      "claim": "Some people genuinely can't name their feelings — a trait called alexithymia — and it's more common than you'd think.",
+      "stat": "In 1,285 Finnish adults: 13% overall; men 17%, women 10%.",
       "citation": "Salminen, J. K., et al. (1999). Prevalence of alexithymia and its association with sociodemographic variables in the general population of Finland. Journal of Psychosomatic Research, 46(1), 75–82.",
       "doi": "10.1016/S0022-3999(98)00053-1",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/10088984/",
-      "license": "Abstract free on PubMed; screenshot the PubMed abstract page (not full text).",
+      "sourceType": "cite",
+      "url": "https://doi.org/10.1016/S0022-3999(98)00053-1",
+      "quote": "The prevalence of alexithymia was 13%",
+      "license": "Subscription journal (Elsevier); NCBI/PubMed bot-gates headless capture, so shown as a citation card (no screenshot).",
       "openAccess": false,
-      "image": "salminen-1999.png",
-      "sha256": "38e52e6a38ae5742725660ffd9ec566e2f35245bacbc4ae7464b129e8387d553",
-      "zoom": {
-        "x": 0.5,
-        "y": 0.45,
-        "scale": 2
-      },
+      "image": null,
+      "locator": null,
+      "sha256": null,
       "verified": true
     },
     {
       "id": "lieberman-2007",
-      "claim": "Putting a feeling into words calms the brain's threat response — the science behind 'name it to tame it'.",
-      "headlineStat": "Labeling an emotion reduced amygdala activity and increased right ventrolateral prefrontal cortex activity.",
+      "claim": "Just putting a feeling into words — 'affect labeling' — calms the amygdala, the brain's threat alarm.",
+      "stat": "Affect labeling reduced amygdala activity (t(29)=2.14, d=0.79) and raised right VLPFC activity.",
       "citation": "Lieberman, M. D., et al. (2007). Putting feelings into words: Affect labeling disrupts amygdala activity in response to affective stimuli. Psychological Science, 18(5), 421–428.",
       "doi": "10.1111/j.1467-9280.2007.01916.x",
+      "sourceType": "pdf",
       "url": "https://bpb-us-e1.wpmucdn.com/blogs.uoregon.edu/dist/f/3181/files/2013/04/2007psychscience-2hp65yu.pdf",
-      "license": "Author-hosted PDF (University of Oregon).",
+      "page": 2,
+      "quote": "the response of the amygdala and other limbic regions",
+      "license": "Author-hosted PDF (University of Oregon); fair-use academic commentary.",
       "openAccess": true,
       "image": "lieberman-2007.png",
-      "sha256": "3d8781e0627a01800aed15aa4223260c0f78f0adf3fca2df9380b54a02934c84",
-      "zoom": {
-        "x": 0.5,
-        "y": 0.6,
-        "scale": 2.4
+      "locator": {
+        "x": 0.07355337091503268,
+        "y": 0.5251355012626262,
+        "w": 0.4019274232026144,
+        "h": 0.011497242424242429
       },
-      "verified": true
+      "sha256": "b86e790a9c755253707e783f3da80b05b598ef974dabf90198636aa9250e1660",
+      "verified": true,
+      "imgW": 1275,
+      "imgH": 1650
+    },
+    {
+      "id": "torre-lieberman-2018",
+      "claim": "Naming a feeling works as 'implicit' emotion regulation — it calms you without even feeling like effort.",
+      "stat": "Affect labeling attenuates emotional experience, unlike effortful techniques.",
+      "citation": "Torre, J. B., & Lieberman, M. D. (2018). Putting feelings into words: Affect labeling as implicit emotion regulation. Emotion Review, 10(2), 116–124.",
+      "doi": "10.1177/1754073917742706",
+      "sourceType": "pdf",
+      "url": "https://static1.squarespace.com/static/651b09f505bc433349d85ab7/t/651d2f2843e6d165beeccb23/1696411432954/Torre(2018)ER.pdf",
+      "page": 1,
+      "quote": "can attenuate our emotional experiences",
+      "license": "Author-hosted PDF; fair-use academic commentary.",
+      "openAccess": true,
+      "image": "torre-lieberman-2018.png",
+      "locator": {
+        "x": 0.4278726170717449,
+        "y": 0.3845027283574041,
+        "w": 0.23568227175293474,
+        "h": 0.011823092071195595
+      },
+      "sha256": "44aca835fbf68e6e896c554e95d85b176c827528d795a6cb31b87dae854bab6e",
+      "verified": true,
+      "imgW": 1241,
+      "imgH": 1654
+    },
+    {
+      "id": "jackson-2019",
+      "claim": "Across 2,474 languages, emotion words differ by culture — yet are universally organized by good-vs-bad and calm-vs-activated.",
+      "stat": "2,474 languages analyzed via 'colexification'; universal axes: valence + physiological activation.",
+      "citation": "Jackson, J. C., et al. (2019). Emotion semantics show both cultural variation and universal structure. Science, 366(6472), 1517–1522.",
+      "doi": "10.1126/science.aaw8160",
+      "sourceType": "pdf",
+      "url": "https://static1.squarespace.com/static/5d8c8bd71a675f210c9996e6/t/5e0266a99bb1cd38ee8a0611/1577215657923/Jackson+Science+2019.pdf",
+      "page": 1,
+      "quote": "hedonic valence and physiological activation",
+      "license": "Author-hosted PDF; fair-use academic commentary.",
+      "openAccess": true,
+      "image": "jackson-2019.png",
+      "locator": {
+        "x": 0.062037385600668044,
+        "y": 0.2755126785714286,
+        "w": 0.5600241896924434,
+        "h": 0.02378303439153439
+      },
+      "sha256": "8c40d2e9dfc3156b19790690f5ca207291fd8481f45b2e9ca469db912711e2e1",
+      "verified": true,
+      "imgW": 1238,
+      "imgH": 1575
     },
     {
       "id": "lomas-2016",
-      "claim": "Hundreds of feelings have words in other languages but none in English.",
-      "headlineStat": "A systematic search found 216 'untranslatable' well-being words with no single English equivalent (now 1,000+).",
+      "claim": "Other languages have named feelings English never did — a scholar catalogued 216 'untranslatable' well-being words.",
+      "stat": "A quasi-systematic search found 216 untranslatable words (now 1,000+).",
       "citation": "Lomas, T. (2016). Towards a positive cross-cultural lexicography: Enriching our emotional landscape through 216 'untranslatable' words pertaining to well-being. The Journal of Positive Psychology, 11(5), 546–558.",
       "doi": "10.1080/17439760.2015.1127993",
-      "url": "https://www.bps.org.uk/research-digest/there-are-least-216-foreign-words-positive-emotional-states-and-concepts-we-dont",
-      "license": "British Psychological Society Research Digest article on the paper (the UEL ROAR open-access host was unreachable); full journal citation shown on screen.",
-      "openAccess": true,
-      "image": "lomas-2016.png",
-      "sha256": "12eb91ed1fba6b972fd187d12492f88a8ef0d3e7c386ffafcdf695365e0335ae",
-      "zoom": {
-        "x": 0.5,
-        "y": 0.4,
-        "scale": 2
-      },
+      "sourceType": "cite",
+      "url": "https://doi.org/10.1080/17439760.2015.1127993",
+      "quote": "A quasi-systematic search uncovered 216 such terms",
+      "license": "Subscription journal; cited on screen (no screenshot). Author open-access copy: roar.uel.ac.uk/4744/",
+      "openAccess": false,
+      "image": null,
+      "locator": null,
+      "sha256": null,
       "verified": true
     },
     {
       "id": "zickfeld-2019",
-      "claim": "'Being moved to tears by connection' is a real, cross-cultural emotion scientists call kama muta.",
-      "headlineStat": "Studied across 3,543 participants in 19 countries and 15 languages; marked by tears, chills, goosebumps and warmth in the chest.",
+      "claim": "That warm, teary feeling when people suddenly connect has a scientific name — kama muta — and it's cross-cultural.",
+      "stat": "Studied in 19 nations, 5 continents, 15 languages, 3,542 participants; warmth in chest, tears, chills.",
       "citation": "Zickfeld, J. H., et al. (2019). Kama muta: Conceptualizing and measuring the experience often labelled being moved across 19 nations and 15 languages. Emotion, 19(3), 402–424.",
       "doi": "10.1037/emo0000450",
-      "url": "https://kamamutalab.org/publications/",
-      "license": "Lab-published resources; screenshot with on-screen citation.",
+      "sourceType": "pdf",
+      "url": "https://www.uni-due.de/imperia/md/content/biwi/einrichtungen/ipsych/diffpsych/kaviar_pre-print.pdf",
+      "page": 3,
+      "quote": "total of 3542 participants",
+      "license": "Author preprint PDF; fair-use academic commentary.",
       "openAccess": true,
       "image": "zickfeld-2019.png",
-      "sha256": "53148690310e96d2fc0c9e2734929f11387b5c234db73af138f74777f524079a",
-      "zoom": {
-        "x": 0.5,
-        "y": 0.35,
-        "scale": 2
+      "locator": {
+        "x": 0.5799318836518748,
+        "y": 0.28275143017530324,
+        "w": 0.20724516005695515,
+        "h": 0.015775972104662635
       },
-      "verified": true
+      "sha256": "bb7a09146dbc719e64b7b089c7227d31e7d393993e0bfd65c0ab1052fd691da7",
+      "verified": true,
+      "imgW": 1241,
+      "imgH": 1754
     },
     {
-      "id": "harrison-loui-2014",
-      "claim": "The chills you get from music ('frisson') are a measurable physiological emotion.",
-      "headlineStat": "Peak musical moments produce measurable spikes in skin conductance and heart rate; people high in Openness feel them more.",
-      "citation": "Harrison, L., & Loui, P. (2014). Thrills, chills, frissons, and skin orgasms: toward an integrative model of transcendent psychophysiological experiences in music. Frontiers in Psychology, 5, 790.",
-      "doi": "10.3389/fpsyg.2014.00790",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4107937/",
-      "license": "CC-BY — fully legal to reproduce text and figures with attribution.",
+      "id": "grewe-2009",
+      "claim": "The chills a song gives you are physically real — skin and heart-rate sensors spike at the exact 'chill' moment.",
+      "stat": "N=95; skin conductance and heart rate peaked during chill episodes.",
+      "citation": "Grewe, O., Nagel, F., Kopiez, R., & Altenmüller, E. (2009). Chills as an indicator of individual emotional peaks. Annals of the New York Academy of Sciences, 1169, 351–354.",
+      "doi": "10.1111/j.1749-6632.2009.04783.x",
+      "sourceType": "pdf",
+      "url": "https://www.immm.hmtm-hannover.de/fileadmin/www.immm/Publikationen/Grewe_et_al_NYAS_2009.pdf",
+      "page": 1,
+      "quote": "revealed peaks during chill episodes",
+      "license": "Author/institution-hosted PDF; fair-use academic commentary.",
       "openAccess": true,
-      "image": "harrison-loui-2014.png",
-      "sha256": "be998e42f90be95f8029b08c7ca8c06b8faed28eb2ae1001441510fb1f09cef3",
-      "zoom": {
-        "x": 0.5,
-        "y": 0.3,
-        "scale": 2.2
+      "image": "grewe-2009.png",
+      "locator": {
+        "x": 0.29832465873015873,
+        "y": 0.2988780638888889,
+        "w": 0.2994528551587302,
+        "h": 0.014234159722222214
       },
+      "sha256": "ddd9211ed4dc04d8c289d3f9043282e218db94d65736a1acfdc60f619c0f56f6",
+      "verified": true,
+      "imgW": 1050,
+      "imgH": 1500
+    },
+    {
+      "id": "colver-2016",
+      "claim": "People high in the personality trait 'Openness' get these musical chills more often.",
+      "stat": "N=100; frisson frequency correlated with Openness to Experience.",
+      "citation": "Colver, M. C., & El-Alayli, A. (2016). Getting aesthetic chills from music: The connection between openness to experience and frisson. Psychology of Music, 44(3), 413–427.",
+      "doi": "10.1177/0305735615572358",
+      "sourceType": "cite",
+      "url": "https://doi.org/10.1177/0305735615572358",
+      "quote": "frequency of frisson was positively correlated with overall Openness to Experience",
+      "license": "Subscription journal; cited on screen (no screenshot).",
+      "openAccess": false,
+      "image": null,
+      "locator": null,
+      "sha256": null,
       "verified": true
     },
     {
       "id": "keltner-haidt-2003",
-      "claim": "Awe — the feeling of being tiny before something vast — is defined by vastness and a need to update your mental models.",
-      "headlineStat": "Awe reliably shrinks the sense of self ('the small self').",
+      "claim": "Awe — feeling tiny before something vast — is defined by two things: perceived vastness and a need to update your mind.",
+      "stat": "Two central appraisals of awe: perceived vastness + need for accommodation.",
       "citation": "Keltner, D., & Haidt, J. (2003). Approaching awe, a moral, spiritual, and aesthetic emotion. Cognition & Emotion, 17(2), 297–314.",
       "doi": "10.1080/02699930302297",
+      "sourceType": "pdf",
       "url": "https://greatergood.berkeley.edu/dacherkeltner/docs/keltner.haidt.awe.2003.pdf",
-      "license": "Author-hosted PDF (Greater Good Science Center, UC Berkeley).",
+      "page": 1,
+      "quote": "perceived vastness, and a need for accommodation",
+      "license": "Author-hosted PDF (Greater Good, UC Berkeley); fair-use academic commentary.",
       "openAccess": true,
       "image": "keltner-haidt-2003.png",
-      "sha256": "43dd731fe36cb71a6e044438c77717cce5110b0a1344ce2306fbe962211d6324",
-      "zoom": {
-        "x": 0.5,
-        "y": 0.45,
-        "scale": 2
+      "locator": {
+        "x": 0.20575330661322647,
+        "y": 0.38336642499999996,
+        "w": 0.5988823567134268,
+        "h": 0.03004706805555557
       },
+      "sha256": "43dd731fe36cb71a6e044438c77717cce5110b0a1344ce2306fbe962211d6324",
+      "verified": true,
+      "imgW": 1040,
+      "imgH": 1500
+    },
+    {
+      "id": "piff-2015",
+      "claim": "In experiments, awe shrinks the self — the 'small self' — and makes people more generous.",
+      "stat": "5 studies, N=2,078; awe → 'small self' → more prosocial behavior.",
+      "citation": "Piff, P. K., Dietze, P., Feinberg, M., Stancato, D. M., & Keltner, D. (2015). Awe, the small self, and prosocial behavior. Journal of Personality and Social Psychology, 108(6), 883–899.",
+      "doi": "10.1037/pspi0000018",
+      "sourceType": "cite",
+      "url": "https://doi.org/10.1037/pspi0000018",
+      "quote": "feelings of a small self",
+      "license": "Subscription journal (APA); cited on screen (no screenshot).",
+      "openAccess": false,
+      "image": null,
+      "locator": null,
+      "sha256": null,
       "verified": true
     }
   ],
   "folkloreDoNotCiteAsScience": [
     {
       "term": "Sonder & The Dictionary of Obscure Sorrows (John Koenig)",
-      "note": "Poetic neologisms, NOT peer-reviewed. If used in narration, explicitly label as a coined word, credit Koenig, and never show it as a scientific finding."
+      "note": "Poetic neologisms, NOT peer-reviewed. If used, label clearly as coined words and credit Koenig — never present as research."
     }
+  ],
+  "corrections": [
+    "Barrett 2001 does NOT contain the '30% more strategies' figure — that is Kashdan et al. 2015's paraphrase (now cited as kashdan-2015-strategies).",
+    "Zickfeld 2019 participant count is 3,542 (not 3,543).",
+    "Harrison & Loui 2014 is a review and was REMOVED as the source for chills physiology/Openness; physiology now cited to Grewe et al. 2009, Openness to Colver & El-Alayli 2016.",
+    "'Small self' is Piff et al. 2015, not Keltner & Haidt 2003 (which gives vastness + need for accommodation).",
+    "Lomas 2016 method was 'quasi-systematic', not 'systematic'."
   ]
 }

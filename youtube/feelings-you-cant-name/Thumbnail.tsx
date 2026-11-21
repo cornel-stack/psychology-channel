@@ -6,7 +6,7 @@
 import React from "react";
 import { AbsoluteFill } from "remotion";
 import { NapkinCanvas } from "../../src/components/NapkinCanvas";
-import { EmotionFigure } from "../../src/components/EmotionFigure";
+import { Peep } from "../../src/components/Peep";
 import { theme } from "../../src/lib/theme";
 import { RoughLayer, RoughCircle } from "../../src/lib/rough";
 
@@ -56,8 +56,8 @@ export const Thumbnail: React.FC<{ variant?: "A" | "B" }> = ({ variant = "A" }) 
           </div>
         </div>
 
-        {/* the face doing the feeling */}
-        <EmotionFigure emotion="awe" action="idle" accent="fear" x={820} y={120} scale={1.0} seed={3} animateIn={false} />
+        {/* the face doing the feeling — an Open Peeps character */}
+        <Peep emotion="awe" seed="thumb-hero" size={560} x={760} y={120} animateIn={false} />
       </NapkinCanvas>
     </AbsoluteFill>
   );

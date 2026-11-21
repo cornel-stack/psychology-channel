@@ -1,54 +1,110 @@
 {
-  "hook": {
-    "audioSec": 8.568,
-    "frames": 276
+  "open-1": {
+    "audioSec": 21.144,
+    "frames": 653
   },
-  "problem": {
-    "audioSec": 13.416,
-    "frames": 421
+  "open-2": {
+    "audioSec": 13.752,
+    "frames": 431
   },
-  "cowen-evidence": {
-    "audioSec": 13.296,
-    "frames": 417
+  "micro-list": {
+    "audioSec": 25.656,
+    "frames": 788
   },
-  "constellation": {
-    "audioSec": 13.488,
-    "frames": 423
+  "vocab": {
+    "audioSec": 29.976,
+    "frames": 918
   },
-  "granularity": {
-    "audioSec": 11.136,
-    "frames": 353
+  "problem-big": {
+    "audioSec": 9.552,
+    "frames": 305
   },
-  "granularity-health": {
-    "audioSec": 11.808,
-    "frames": 373
+  "cowen": {
+    "audioSec": 31.632,
+    "frames": 967
+  },
+  "jackson": {
+    "audioSec": 36.192,
+    "frames": 1104
+  },
+  "names-big": {
+    "audioSec": 11.064,
+    "frames": 350
+  },
+  "barrett": {
+    "audioSec": 25.704,
+    "frames": 790
+  },
+  "kashdan-strat": {
+    "audioSec": 15.912,
+    "frames": 496
+  },
+  "kashdan-costs": {
+    "audioSec": 24.096,
+    "frames": 741
   },
   "alexithymia": {
-    "audioSec": 13.512,
-    "frames": 424
+    "audioSec": 23.904,
+    "frames": 736
+  },
+  "lieberman": {
+    "audioSec": 26.112,
+    "frames": 802
+  },
+  "torre": {
+    "audioSec": 18.456,
+    "frames": 572
+  },
+  "tour-big": {
+    "audioSec": 9.576,
+    "frames": 306
   },
   "kama-muta": {
-    "audioSec": 14.448,
-    "frames": 452
+    "audioSec": 31.752,
+    "frames": 971
   },
   "frisson": {
-    "audioSec": 12.264,
-    "frames": 386
+    "audioSec": 21.504,
+    "frames": 664
+  },
+  "frisson-openness": {
+    "audioSec": 14.712,
+    "frames": 460
   },
   "awe": {
-    "audioSec": 11.472,
-    "frames": 363
+    "audioSec": 21.144,
+    "frames": 653
+  },
+  "awe-smallself": {
+    "audioSec": 17.184,
+    "frames": 534
   },
   "untranslatable": {
-    "audioSec": 11.952,
-    "frames": 377
+    "audioSec": 33.6,
+    "frames": 1026
   },
-  "name-it": {
-    "audioSec": 12.264,
-    "frames": 386
+  "sonder-aside": {
+    "audioSec": 30.48,
+    "frames": 933
+  },
+  "hoemann": {
+    "audioSec": 21.936,
+    "frames": 677
+  },
+  "practice": {
+    "audioSec": 27.936,
+    "frames": 857
+  },
+  "build-skill": {
+    "audioSec": 35.832,
+    "frames": 1093
+  },
+  "recap": {
+    "audioSec": 22.128,
+    "frames": 682
   },
   "outro": {
-    "audioSec": 12.024,
-    "frames": 379
+    "audioSec": 19.944,
+    "frames": 617
   }
 }

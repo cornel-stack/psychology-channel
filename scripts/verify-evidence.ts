@@ -1,23 +1,16 @@
 /**
- * Evidence verifier — the gate for Rule #1.
+ * Evidence verifier — the gate for Rule #1 (schema v2, locator-aware).
  *
- * For every source in evidence/sources.json this checks:
- *   1. The citation URL (and DOI, if present) actually resolves (HTTP < 400).
- *   2. A screenshot image exists in evidence/images/.
- *   3. The screenshot's sha256 matches the hash recorded in sources.json
- *      (so a claim's on-screen "proof" cannot be silently swapped).
+ * A source is VERIFIED only when:
+ *   - its citation URL (and DOI) resolves, AND
+ *   - sourceType "cite": that's enough (paywalled → citation card only);
+ *   - sourceType "pdf"/"web": a screenshot exists, its sha256 matches the
+ *     recorded hash, AND a `locator` (the exact quote rectangle) is present.
  *
- * A source is considered VERIFIED only when all three pass. The script then
- * rewrites sources.json flipping `verified` + filling `sha256`.
+ * The locator requirement is what guarantees we zoom to the real sentence —
+ * a screenshot with no located quote is NOT shown as proof.
  *
- * Exit codes:
- *   0  -> at least the URL checks passed for every source (safe to render;
- *         unverified-image sources are simply withheld from screen by the UI).
- *   1  -> a hard failure the author must fix.
- *
- * Usage:
- *   npm run verify-evidence            # verify + update flags
- *   npm run verify-evidence -- --strict  # also FAIL if any image is missing
+ * Usage: npm run verify-evidence [-- --strict]
  */
 import { createHash } from "node:crypto";
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
@@ -30,17 +23,17 @@ const SOURCES = join(ROOT, "evidence", "sources.json");
 const IMAGES = join(ROOT, "evidence", "images");
 const STRICT = process.argv.includes("--strict");
 
+type Rect = { x: number; y: number; w: number; h: number };
 type Source = {
   id: string;
-  claim: string;
-  citation: string;
+  sourceType: "pdf" | "web" | "cite";
   doi?: string | null;
   url: string;
-  image: string;
+  image: string | null;
+  locator: Rect | null;
   sha256?: string | null;
   verified: boolean;
 };
-
 type Db = { sources: Source[]; [k: string]: unknown };
 
 const sha256 = (buf: Buffer) => createHash("sha256").update(buf).digest("hex");
@@ -56,7 +49,6 @@ async function urlResolves(url: string): Promise<boolean> {
         signal: ctrl.signal,
         headers: { "User-Agent": "Mozilla/5.0 (evidence-verifier)" },
       });
-      // Some scholarly hosts reject HEAD; treat <400 as resolving.
       return res.status < 400 || res.status === 403; // 403 = exists but bot-gated
     } catch {
       return false;
@@ -74,24 +66,27 @@ async function main() {
 
   for (const s of db.sources) {
     const checks: string[] = [];
-
-    // 1. URL resolves
     const okUrl = await urlResolves(s.url);
     checks.push(okUrl ? "url:ok" : "url:FAIL");
-    if (!okUrl) {
-      report.push(`  ⚠️  ${s.id}: citation URL did not resolve -> ${s.url}`);
-    }
+    if (!okUrl) report.push(`  ⚠️  ${s.id}: URL did not resolve -> ${s.url}`);
     const okDoi = s.doi ? await urlResolves(`https://doi.org/${s.doi}`) : true;
     if (s.doi) checks.push(okDoi ? "doi:ok" : "doi:FAIL");
 
-    // 2 + 3. Image exists and matches recorded hash
-    const imgPath = join(IMAGES, s.image);
-    const imgExists = existsSync(imgPath);
+    if (s.sourceType === "cite") {
+      s.verified = okUrl && okDoi;
+      checks.push("cite");
+      report.push(`  ${s.verified ? "✅" : "⏳"} ${s.id.padEnd(24)} [${checks.join(", ")}]`);
+      continue;
+    }
+
+    // pdf/web need image + hash + locator
+    const imgPath = s.image ? join(IMAGES, s.image) : "";
+    const imgExists = Boolean(s.image) && existsSync(imgPath);
     let hashOk = false;
     if (imgExists) {
       const hash = sha256(readFileSync(imgPath));
       if (!s.sha256) {
-        s.sha256 = hash; // first capture — record it
+        s.sha256 = hash;
         hashOk = true;
         checks.push("img:captured");
       } else if (s.sha256 === hash) {
@@ -99,39 +94,39 @@ async function main() {
         checks.push("img:ok");
       } else {
         checks.push("img:HASH-MISMATCH");
-        report.push(
-          `  ❌ ${s.id}: screenshot hash changed! recorded=${s.sha256.slice(0, 12)} actual=${hash.slice(0, 12)}`
-        );
+        report.push(`  ❌ ${s.id}: screenshot hash changed (recapture reset: set sha256 null).`);
         hardFail = true;
       }
     } else {
       checks.push("img:missing");
-      report.push(`  ⚠️  ${s.id}: no screenshot yet (run "npm run fetch-evidence") -> ${s.image}`);
+      report.push(`  ⚠️  ${s.id}: no screenshot (run "npm run fetch-evidence")`);
       if (STRICT) hardFail = true;
     }
 
-    // A claim is only VERIFIED (shown on screen) when URL + image + hash all pass.
-    s.verified = okUrl && okDoi && imgExists && hashOk;
-    report.push(`  ${s.verified ? "✅" : "⏳"} ${s.id.padEnd(22)} [${checks.join(", ")}]`);
+    const hasLocator = Boolean(s.locator);
+    checks.push(hasLocator ? "locator:ok" : "locator:MISSING");
+    if (!hasLocator) report.push(`  ⚠️  ${s.id}: no quote locator — claim will be withheld.`);
+
+    s.verified = okUrl && okDoi && imgExists && hashOk && hasLocator;
+    report.push(`  ${s.verified ? "✅" : "⏳"} ${s.id.padEnd(24)} [${checks.join(", ")}]`);
   }
 
   writeFileSync(SOURCES, JSON.stringify(db, null, 2) + "\n");
 
   const verified = db.sources.filter((s) => s.verified).length;
-  console.log("\nEvidence verification\n=====================");
+  console.log("\nEvidence verification (schema v2)\n=================================");
   console.log(report.join("\n"));
-  console.log(`\n${verified}/${db.sources.length} sources fully verified (URL + screenshot + hash).`);
+  console.log(`\n${verified}/${db.sources.length} sources verified.`);
   console.log(
     verified < db.sources.length
-      ? "Unverified sources will be WITHHELD from the video (no claim shown without proof).\n"
-      : "All sources verified. Every on-screen claim is backed by a checked screenshot.\n"
+      ? "Unverified sources are WITHHELD from the video.\n"
+      : "All sources verified — every on-screen claim points to a located quote.\n"
   );
 
   if (hardFail) {
-    console.error("Hard failure (hash mismatch, or --strict with a missing image). Fix before rendering.");
+    console.error("Hard failure. Fix before rendering.");
     process.exit(1);
   }
-  process.exit(0);
 }
 
 main().catch((e) => {
