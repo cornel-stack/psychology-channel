@@ -19,3 +19,6 @@ public/evidence/*
 !public/evidence/.gitkeep
 # temp PDF downloads from the evidence fetcher
 evidence/images/*.tmp.pdf
+
+# Remotion bundle output
+build/
