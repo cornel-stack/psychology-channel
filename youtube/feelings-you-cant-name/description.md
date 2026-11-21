@@ -7,17 +7,17 @@ Everything in this video is backed by peer-reviewed research. Citations and link
 ⏱️ CHAPTERS
 0:00 You're feeling something right now
 0:09 Why we only learn 5 feelings
-0:18 The map of 27 emotions (Cowen & Keltner)
-0:29 The emotion constellation
-0:39 Why naming feelings helps you regulate them
-0:50 The hidden cost of vague feelings
-1:00 Alexithymia: no words for feelings
-1:10 Kama muta — "being moved"
-1:21 Frisson — chills from music
-1:31 Awe — feeling tiny before something vast
-1:41 Words other languages have (and English doesn't)
-1:53 Name it to tame it
-2:04 You weren't broken — you were under-worded
+0:23 The map of 27 emotions (Cowen & Keltner)
+0:37 The emotion constellation
+0:51 Why naming feelings helps you regulate them
+1:03 The hidden cost of vague feelings
+1:15 Alexithymia: no words for feelings
+1:29 Kama muta — "being moved"
+1:44 Frisson — chills from music
+1:57 Awe — feeling tiny before something vast
+2:09 Words other languages have (and English doesn't)
+2:22 Name it to tame it
+2:35 You weren't broken — you were under-worded
 
 📚 SOURCES (every on-screen claim)
 • Cowen & Keltner (2017), PNAS — 27 emotion categories. doi:10.1073/pnas.1702247114 — https://pmc.ncbi.nlm.nih.gov/articles/PMC5617253/

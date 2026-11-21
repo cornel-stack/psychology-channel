@@ -18,6 +18,17 @@ npm run verify-evidence       # check + record hashes + flip `verified`
 npm run verify-evidence -- --strict   # also fail if any image is missing
 ```
 
+## Re-capturing an existing source
+The verifier hash-locks each screenshot to detect tampering, so re-fetching a source that already has an image is a deliberate action:
+```bash
+# reset the lock for that source, then re-capture + re-verify
+# (set its "sha256": null in sources.json, or just delete the PNG)
+rm evidence/images/<id>.png
+npm run fetch-evidence -- <id>      # named id always re-fetches
+npm run verify-evidence             # records the new hash, re-marks verified
+```
+`npm run fetch-evidence` with no args **skips** images that already exist (so CI stays stable); use `-- <id>` or `--force` to override.
+
 ## Capturing by hand
 Some publishers block headless browsers. If `fetch-evidence` fails for a source, open its `url`, screenshot the page (PNG), and save it as `images/<id>.png`. Then run `verify-evidence` — a hand-placed file is treated identically.
 

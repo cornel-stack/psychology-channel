@@ -12,6 +12,7 @@
     "verify-evidence": "tsx scripts/verify-evidence.ts",
     "fetch-evidence": "tsx scripts/fetch-evidence.ts",
     "prep": "tsx scripts/prep-assets.ts",
+    "voiceover": "tsx scripts/generate-voiceover.ts",
     "predev": "tsx scripts/prep-assets.ts",
     "prerender": "tsx scripts/prep-assets.ts",
     "render": "remotion render FeelingsYouCantName out/feelings-you-cant-name.mp4 --gl=swangle",

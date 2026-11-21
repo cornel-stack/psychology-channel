@@ -10,3 +10,12 @@ out/
 # Large character binaries are fetched/placed locally; keep the repo light.
 public/assets/*.vrm
 public/assets/*.glb
+# Generated voiceover (rebuilt from script via Edge TTS on each run)
+public/assets/vo/
+public/assets/voiceover.mp3
+public/assets/music.mp3
+# public/evidence is copied from evidence/images by prep-assets (generated)
+public/evidence/*
+!public/evidence/.gitkeep
+# temp PDF downloads from the evidence fetcher
+evidence/images/*.tmp.pdf

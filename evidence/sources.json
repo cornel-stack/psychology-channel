@@ -13,9 +13,13 @@
       "license": "Free via PMC; figures reproduced for educational commentary (fair use) with on-screen citation.",
       "openAccess": true,
       "image": "cowen-keltner-2017.png",
-      "sha256": null,
-      "zoom": { "x": 0.5, "y": 0.28, "scale": 2.4 },
-      "verified": false
+      "sha256": "4208336097c10ec482cc65d369288f5adb51e96db430ae05ba9cfe9fcae837d9",
+      "zoom": {
+        "x": 0.5,
+        "y": 0.28,
+        "scale": 2.4
+      },
+      "verified": true
     },
     {
       "id": "barrett-2001",
@@ -23,13 +27,17 @@
       "headlineStat": "High emotion-differentiation individuals used ~30% more emotion-regulation strategies.",
       "citation": "Barrett, L. F., Gross, J., Christensen, T. C., & Benvenuto, M. (2001). Knowing what you're feeling and knowing what to do about it. Cognition & Emotion, 15(6), 713–724.",
       "doi": "10.1080/02699930143000239",
-      "url": "https://www.affective-science.org/pubs/2001/01MaprelationDiffReg.pdf",
+      "url": "https://www.affective-science.org/wp-content/uploads/2024/04/01MaprelationDiffReg.pdf",
       "license": "Author-hosted PDF (Barrett's Affective Science lab).",
       "openAccess": true,
       "image": "barrett-2001.png",
-      "sha256": null,
-      "zoom": { "x": 0.5, "y": 0.4, "scale": 2.2 },
-      "verified": false
+      "sha256": "a8ce2d93813676f71edc3a935d1e01a96a6e73ce4372cf70ac23d465fd7ea46c",
+      "zoom": {
+        "x": 0.5,
+        "y": 0.4,
+        "scale": 2.2
+      },
+      "verified": true
     },
     {
       "id": "kashdan-2015",
@@ -41,9 +49,13 @@
       "license": "Author/institution-hosted PDF (MIT). Screenshot with on-screen citation as fair-use commentary.",
       "openAccess": true,
       "image": "kashdan-2015.png",
-      "sha256": null,
-      "zoom": { "x": 0.5, "y": 0.35, "scale": 2.2 },
-      "verified": false
+      "sha256": "a90f79873509d38c849cc7060c906a2458b5713037ecf013afce422d29b46268",
+      "zoom": {
+        "x": 0.5,
+        "y": 0.35,
+        "scale": 2.2
+      },
+      "verified": true
     },
     {
       "id": "hoemann-2021",
@@ -55,9 +67,13 @@
       "license": "CC-BY — figures and text may be reproduced with attribution.",
       "openAccess": true,
       "image": "hoemann-2021.png",
-      "sha256": null,
-      "zoom": { "x": 0.5, "y": 0.3, "scale": 2.2 },
-      "verified": false
+      "sha256": "62bafcaf11a06866d0cbac7e4e042ec0b7ad8fc6f5cae0d82fc2828bdb69d3d4",
+      "zoom": {
+        "x": 0.5,
+        "y": 0.3,
+        "scale": 2.2
+      },
+      "verified": true
     },
     {
       "id": "salminen-1999",
@@ -69,9 +85,13 @@
       "license": "Abstract free on PubMed; screenshot the PubMed abstract page (not full text).",
       "openAccess": false,
       "image": "salminen-1999.png",
-      "sha256": null,
-      "zoom": { "x": 0.5, "y": 0.45, "scale": 2.0 },
-      "verified": false
+      "sha256": "38e52e6a38ae5742725660ffd9ec566e2f35245bacbc4ae7464b129e8387d553",
+      "zoom": {
+        "x": 0.5,
+        "y": 0.45,
+        "scale": 2
+      },
+      "verified": true
     },
     {
       "id": "lieberman-2007",
@@ -83,9 +103,13 @@
       "license": "Author-hosted PDF (University of Oregon).",
       "openAccess": true,
       "image": "lieberman-2007.png",
-      "sha256": null,
-      "zoom": { "x": 0.5, "y": 0.6, "scale": 2.4 },
-      "verified": false
+      "sha256": "3d8781e0627a01800aed15aa4223260c0f78f0adf3fca2df9380b54a02934c84",
+      "zoom": {
+        "x": 0.5,
+        "y": 0.6,
+        "scale": 2.4
+      },
+      "verified": true
     },
     {
       "id": "lomas-2016",
@@ -93,13 +117,17 @@
       "headlineStat": "A systematic search found 216 'untranslatable' well-being words with no single English equivalent (now 1,000+).",
       "citation": "Lomas, T. (2016). Towards a positive cross-cultural lexicography: Enriching our emotional landscape through 216 'untranslatable' words pertaining to well-being. The Journal of Positive Psychology, 11(5), 546–558.",
       "doi": "10.1080/17439760.2015.1127993",
-      "url": "http://roar.uel.ac.uk/4744/",
-      "license": "Green open access via University of East London repository.",
+      "url": "https://www.bps.org.uk/research-digest/there-are-least-216-foreign-words-positive-emotional-states-and-concepts-we-dont",
+      "license": "British Psychological Society Research Digest article on the paper (the UEL ROAR open-access host was unreachable); full journal citation shown on screen.",
       "openAccess": true,
       "image": "lomas-2016.png",
-      "sha256": null,
-      "zoom": { "x": 0.5, "y": 0.4, "scale": 2.0 },
-      "verified": false
+      "sha256": "12eb91ed1fba6b972fd187d12492f88a8ef0d3e7c386ffafcdf695365e0335ae",
+      "zoom": {
+        "x": 0.5,
+        "y": 0.4,
+        "scale": 2
+      },
+      "verified": true
     },
     {
       "id": "zickfeld-2019",
@@ -111,9 +139,13 @@
       "license": "Lab-published resources; screenshot with on-screen citation.",
       "openAccess": true,
       "image": "zickfeld-2019.png",
-      "sha256": null,
-      "zoom": { "x": 0.5, "y": 0.35, "scale": 2.0 },
-      "verified": false
+      "sha256": "53148690310e96d2fc0c9e2734929f11387b5c234db73af138f74777f524079a",
+      "zoom": {
+        "x": 0.5,
+        "y": 0.35,
+        "scale": 2
+      },
+      "verified": true
     },
     {
       "id": "harrison-loui-2014",
@@ -125,9 +157,13 @@
       "license": "CC-BY — fully legal to reproduce text and figures with attribution.",
       "openAccess": true,
       "image": "harrison-loui-2014.png",
-      "sha256": null,
-      "zoom": { "x": 0.5, "y": 0.3, "scale": 2.2 },
-      "verified": false
+      "sha256": "be998e42f90be95f8029b08c7ca8c06b8faed28eb2ae1001441510fb1f09cef3",
+      "zoom": {
+        "x": 0.5,
+        "y": 0.3,
+        "scale": 2.2
+      },
+      "verified": true
     },
     {
       "id": "keltner-haidt-2003",
@@ -135,13 +171,17 @@
       "headlineStat": "Awe reliably shrinks the sense of self ('the small self').",
       "citation": "Keltner, D., & Haidt, J. (2003). Approaching awe, a moral, spiritual, and aesthetic emotion. Cognition & Emotion, 17(2), 297–314.",
       "doi": "10.1080/02699930302297",
-      "url": "https://greatergood.berkeley.edu/images/uploads/KeltnerHaidt-Awe.pdf",
+      "url": "https://greatergood.berkeley.edu/dacherkeltner/docs/keltner.haidt.awe.2003.pdf",
       "license": "Author-hosted PDF (Greater Good Science Center, UC Berkeley).",
       "openAccess": true,
       "image": "keltner-haidt-2003.png",
-      "sha256": null,
-      "zoom": { "x": 0.5, "y": 0.45, "scale": 2.0 },
-      "verified": false
+      "sha256": "43dd731fe36cb71a6e044438c77717cce5110b0a1344ce2306fbe962211d6324",
+      "zoom": {
+        "x": 0.5,
+        "y": 0.45,
+        "scale": 2
+      },
+      "verified": true
     }
   ],
   "folkloreDoNotCiteAsScience": [

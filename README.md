@@ -57,7 +57,12 @@ npm run verify-evidence    # URL resolves? image present? hash matches? -> marks
 
 - **Script, timing, captions:** [`src/videos/feelings-you-cant-name/script.ts`](src/videos/feelings-you-cant-name/script.ts)
 - **Scenes:** [`src/videos/feelings-you-cant-name/scenes/index.tsx`](src/videos/feelings-you-cant-name/scenes/index.tsx)
-- **Voiceover (optional):** drop `public/assets/voiceover.mp3` (and `music.mp3`). The video renders fine without them — captions carry it silent.
+- **Voiceover:** narrated by **Edge TTS "Brian"** (`en-US-BrianNeural`), generated from each scene's `narration` field:
+  ```bash
+  python3 -m pip install --user edge-tts   # once
+  npm run voiceover                         # synth Brian VO + auto-sync scene lengths & captions
+  ```
+  This writes `public/assets/voiceover.mp3` and `narration.json` (real per-scene durations). CI runs it automatically. Add `public/assets/music.mp3` for optional background music.
 
 ## 🎞️ Using Manim clips (Rule #4)
 Render a Manim scene to `public/assets/<name>.mp4`, then in a scene component:

@@ -6,9 +6,9 @@ on:
   workflow_dispatch:
     inputs:
       fetch_evidence:
-        description: "Re-capture research screenshots before rendering"
+        description: "Re-capture research screenshots (normally off — committed images are used)"
         type: boolean
-        default: true
+        default: false
   push:
     branches: [main]
     paths:
@@ -35,6 +35,10 @@ jobs:
           node-version: 22
           cache: npm
 
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
       # Remotion needs these libs for headless Chrome video rendering.
       - name: Install system deps for headless Chrome
         run: |
@@ -48,8 +52,16 @@ jobs:
       - name: Install dependencies
         run: npm ci || npm install
 
+      - name: Generate voiceover (Edge TTS — Brian)
+        run: |
+          python3 -m pip install --user edge-tts
+          npm run voiceover
+
+      # Normally OFF: the 10 research screenshots are committed to the repo and
+      # hash-verified. Re-fetching is opt-in (dynamic pages change bytes and would
+      # trip the verifier's tamper-check). When on, it only fills in MISSING images.
       - name: Capture research screenshots (evidence)
-        if: ${{ github.event_name != 'workflow_dispatch' || inputs.fetch_evidence }}
+        if: ${{ inputs.fetch_evidence }}
         run: |
           npx playwright install --with-deps chromium
           npm run fetch-evidence || echo "Some captures failed; verifier will withhold those claims."

@@ -1,0 +1,54 @@
+{
+  "hook": {
+    "audioSec": 8.568,
+    "frames": 276
+  },
+  "problem": {
+    "audioSec": 13.416,
+    "frames": 421
+  },
+  "cowen-evidence": {
+    "audioSec": 13.296,
+    "frames": 417
+  },
+  "constellation": {
+    "audioSec": 13.488,
+    "frames": 423
+  },
+  "granularity": {
+    "audioSec": 11.136,
+    "frames": 353
+  },
+  "granularity-health": {
+    "audioSec": 11.808,
+    "frames": 373
+  },
+  "alexithymia": {
+    "audioSec": 13.512,
+    "frames": 424
+  },
+  "kama-muta": {
+    "audioSec": 14.448,
+    "frames": 452
+  },
+  "frisson": {
+    "audioSec": 12.264,
+    "frames": 386
+  },
+  "awe": {
+    "audioSec": 11.472,
+    "frames": 363
+  },
+  "untranslatable": {
+    "audioSec": 11.952,
+    "frames": 377
+  },
+  "name-it": {
+    "audioSec": 12.264,
+    "frames": 386
+  },
+  "outro": {
+    "audioSec": 12.024,
+    "frames": 379
+  }
+}

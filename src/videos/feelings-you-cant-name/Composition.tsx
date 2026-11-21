@@ -1,21 +1,21 @@
 import React from "react";
-import { AbsoluteFill, Sequence, Series, useVideoConfig, Audio, staticFile } from "remotion";
+import { AbsoluteFill, Sequence, Series, Audio, staticFile } from "remotion";
 import { SCENES } from "./script";
 import { renderScene } from "./scenes";
 import { theme } from "../../lib/theme";
 
 /**
- * Main composition. Scenes play back-to-back via <Series>. Optional voiceover
- * and music are loaded from public/assets if present (the render works without
- * them — captions carry the video silently).
+ * Main composition. Scenes play back-to-back via <Series>, each scene's length
+ * driven by its real Edge TTS (Brian) narration duration. The concatenated
+ * voiceover.mp3 lines up frame-for-frame because each scene's frame count
+ * matches its audio segment length.
  */
 export const FeelingsYouCantName: React.FC = () => {
-  const { fps } = useVideoConfig();
   return (
     <AbsoluteFill style={{ backgroundColor: theme.paper }}>
       <Series>
         {SCENES.map((scene) => (
-          <Series.Sequence key={scene.id} durationInFrames={Math.round(scene.durationSec * fps)}>
+          <Series.Sequence key={scene.id} durationInFrames={scene.durationFrames}>
             {renderScene(scene)}
           </Series.Sequence>
         ))}

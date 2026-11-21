@@ -8,8 +8,8 @@
  * This same script is the basis for the voiceover (narration field) and the
  * YouTube description chapters (see metadata.ts).
  */
-import { AccentKey } from "../../lib/theme";
-import { Emotion, Action } from "../../components/EmotionFigure";
+import type { AccentKey } from "../../lib/theme";
+import type { Emotion, Action } from "../../components/EmotionFigure";
 
 export type SceneType =
   | "hook"
@@ -21,10 +21,10 @@ export type SceneType =
 
 export type Cue = { text: string; from: number; dur: number };
 
-export type Scene = {
+export type RawScene = {
   id: string;
   type: SceneType;
-  durationSec: number;
+  estSec: number; // hand-authored estimate; overridden by real TTS duration
   accent: AccentKey;
   sourceId?: string;
   emotion?: Emotion;
@@ -32,15 +32,20 @@ export type Scene = {
   title?: string;
   subtitle?: string;
   words?: { word: string; lang: string; meaning: string }[];
-  narration: string; // full VO line for this scene
+  narration: string; // full VO line for this scene — fed to Edge TTS (Brian)
   cues: Cue[]; // on-screen captions
 };
 
-export const SCENES: Scene[] = [
+export type Scene = RawScene & {
+  durationSec: number; // final duration (from TTS if available)
+  durationFrames: number;
+};
+
+const RAW: RawScene[] = [
   {
     id: "hook",
     type: "hook",
-    durationSec: 9,
+    estSec: 9,
     accent: "fear",
     emotion: "awe",
     title: "Every Feeling You Can't Name",
@@ -56,7 +61,7 @@ export const SCENES: Scene[] = [
   {
     id: "problem",
     type: "figure",
-    durationSec: 9,
+    estSec: 9,
     accent: "sadness",
     emotion: "sad",
     action: "sit",
@@ -71,7 +76,7 @@ export const SCENES: Scene[] = [
   {
     id: "cowen-evidence",
     type: "evidence",
-    durationSec: 11,
+    estSec: 11,
     accent: "awe",
     sourceId: "cowen-keltner-2017",
     narration:
@@ -85,7 +90,7 @@ export const SCENES: Scene[] = [
   {
     id: "constellation",
     type: "constellation3d",
-    durationSec: 10,
+    estSec: 10,
     accent: "fear",
     narration:
       "Twenty-seven categories — admiration, awe, nostalgia, craving, awkwardness — and they don't sit in neat boxes. They bridge into one another through smooth gradients. This is the real shape of how you feel.",
@@ -98,7 +103,7 @@ export const SCENES: Scene[] = [
   {
     id: "granularity",
     type: "evidence",
-    durationSec: 11,
+    estSec: 11,
     accent: "joy",
     sourceId: "barrett-2001",
     narration:
@@ -112,7 +117,7 @@ export const SCENES: Scene[] = [
   {
     id: "granularity-health",
     type: "evidence",
-    durationSec: 10,
+    estSec: 10,
     accent: "anger",
     sourceId: "kashdan-2015",
     narration:
@@ -126,7 +131,7 @@ export const SCENES: Scene[] = [
   {
     id: "alexithymia",
     type: "evidence",
-    durationSec: 10,
+    estSec: 10,
     accent: "sadness",
     sourceId: "salminen-1999",
     narration:
@@ -140,7 +145,7 @@ export const SCENES: Scene[] = [
   {
     id: "kama-muta",
     type: "evidence",
-    durationSec: 11,
+    estSec: 11,
     accent: "nostalgia",
     sourceId: "zickfeld-2019",
     emotion: "joy",
@@ -155,7 +160,7 @@ export const SCENES: Scene[] = [
   {
     id: "frisson",
     type: "evidence",
-    durationSec: 10,
+    estSec: 10,
     accent: "fear",
     sourceId: "harrison-loui-2014",
     emotion: "awe",
@@ -170,7 +175,7 @@ export const SCENES: Scene[] = [
   {
     id: "awe",
     type: "evidence",
-    durationSec: 10,
+    estSec: 10,
     accent: "awe",
     sourceId: "keltner-haidt-2003",
     emotion: "awe",
@@ -185,7 +190,7 @@ export const SCENES: Scene[] = [
   {
     id: "untranslatable",
     type: "wordcards",
-    durationSec: 12,
+    estSec: 12,
     accent: "calm",
     sourceId: "lomas-2016",
     words: [
@@ -204,7 +209,7 @@ export const SCENES: Scene[] = [
   {
     id: "name-it",
     type: "evidence",
-    durationSec: 11,
+    estSec: 11,
     accent: "joy",
     sourceId: "lieberman-2007",
     emotion: "joy",
@@ -219,7 +224,7 @@ export const SCENES: Scene[] = [
   {
     id: "outro",
     type: "outro",
-    durationSec: 9,
+    estSec: 9,
     accent: "awe",
     emotion: "joy",
     narration:
@@ -232,4 +237,28 @@ export const SCENES: Scene[] = [
   },
 ];
 
+// Real per-scene audio durations, produced by `npm run voiceover` (Edge TTS,
+// Brian). Shape: { [sceneId]: { audioSec, frames } }. Empty until generated —
+// the video then falls back to the hand-authored estSec estimates.
+import narration from "./narration.json";
+
+const FPS = 30;
+
+const narrationMap = narration as Record<string, { audioSec: number; frames: number }>;
+
+/**
+ * Build final scenes: use the measured TTS duration when available, and scale
+ * the hand-authored caption cues to match the real speech length so captions
+ * stay in sync with Brian's narration.
+ */
+export const SCENES: Scene[] = RAW.map((raw) => {
+  const n = narrationMap[raw.id];
+  const durationFrames = n ? n.frames : Math.round(raw.estSec * FPS);
+  const durationSec = durationFrames / FPS;
+  const scale = n ? n.audioSec / raw.estSec : 1;
+  const cues = raw.cues.map((c) => ({ ...c, from: c.from * scale, dur: c.dur * scale }));
+  return { ...raw, durationFrames, durationSec, cues };
+});
+
 export const TOTAL_SEC = SCENES.reduce((a, s) => a + s.durationSec, 0);
+export const TOTAL_FRAMES = SCENES.reduce((a, s) => a + s.durationFrames, 0);
